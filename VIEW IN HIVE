@@ -1,0 +1,24 @@
+VIEW IN HIVE
+-------------
+
+Views are virtual table. A view is associated to a query and saved.
+Later when the saved view is run, the query gets executed.
+
+hive> select * from emprecords;
++------+--------------+-------------+-------------------+--------+
+| ID   | Name         | Salary      | Designation       | Dept   |
++------+--------------+-------------+-------------------+--------+
+|1201  | Gopal        | 45000       | Technical manager | TP     |
+|1202  | Manisha      | 45000       | Proofreader       | PR     |
+|1203  | Masthanvali  | 40000       | Technical writer  | TP     |
+|1204  | Krian        | 40000       | Hr Admin          | HR     |
+|1205  | Kranthi      | 30000       | Op Admin          | Admin  |
++------+--------------+-------------+-------------------+--------+
+
+//Create a view named emp_30000
+hive>CREATE VIEW emp_30000 AS
+SELECT * FROM employee
+WHERE salary>30000;
+
+//Executing the saved view emp_30000
+hive> select* from emp_30000 order by salary desc;

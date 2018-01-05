@@ -1,0 +1,30 @@
+PARTITIONING OF DATA IN HIVE :-
+-----------------------------
+
+1. Create partition table.
+2. Set some partition properties
+3 Load the data in partition table from an existing HIVE managed table.
+
+----CREATING PARTITION TABLE ON txnrecords table
+
+(I) We are creating a partition table on the column 'Category' of txns1 dataset in 'txnrecords table' (We have 15 categories here) - SINGLE BUCKET
+
+a) First we will create a table
+----------------------------------------------
+create table txnrecsByCat(txnno INT, txndate STRING, custno INT, amount DOUBLE, product STRING, city STRING, state STRING, spendby
+STRING)
+partitioned by (category STRING)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+
+b) Now we set the properties by running the following commands-
+--------------------------------------------------------------------------------------------
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.exec.dynamic.partition=true;
+
+c) Now we will load the data 
+------------------------------------------ 
+from txnrecords txn INSERT OVERWRITE TABLE txnrecsByCat PARTITION(category) select txn.txnno, txn.txndate, txn.custno, txn.amount,
+txn.product, txn.city, txn.state, txn.spendby, txn.category DISTRIBUTE By category;

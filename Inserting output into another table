@@ -1,0 +1,9 @@
+--> Inserting output into another table ( make sure Airsports table is created beforehand)
+---------------------------------------------------------------------------------------
+create table Airsports(txnno INT, txndate STRING, custno INT, amount DOUBLE, 
+category STRING, product STRING, city STRING, state STRING, spendby STRING)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+insert overwrite table Airsports select * from txnrecords where category = 'Air Sports';

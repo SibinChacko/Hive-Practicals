@@ -1,0 +1,21 @@
+
+a) Create table  being partitioned on 'category' and 'spendby' columns of txns1 dataset in 'txnrecords table'
+-----------------------------------------------------------------------------------
+
+create table txnrecsByCat4(txnno INT, txndate STRING, custno INT, amount DOUBLE, product STRING, city STRING, state STRING)
+partitioned by (category STRING, spendby STRING)
+row format delimited
+fields terminated by ','
+stored as textfile;
+ 
+b) Set properties
+-----------------------
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.exec.dynamic.partition=true;
+
+
+c)Load data
+------------------
+
+from txnrecords txn INSERT OVERWRITE TABLE txnrecsByCat4 PARTITION(category,spendby) select txn.txnno, txn.txndate, txn.custno, txn.amount,
+txn.product, txn.city, txn.state, txn.category, txn.spendby, DISTRIBUTE By category,spendby;

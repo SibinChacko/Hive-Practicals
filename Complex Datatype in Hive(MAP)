@@ -1,0 +1,23 @@
+Complex datatype in Hive : MAP
+------------------------------
+$ cat >mapfile
+1,abc,40000,a$b$c,bonus#500$insurance#200,city1
+2,def,3000,d$f,bonus#500,city2
+3,xyz,10000,g$h,esic#1000$da#400,city2
+
+//LAB Start
+hive>
+create table tab10(id int,name string,sal bigint,sub array<string>,dud map<string,int>,city string)
+row format delimited 
+fields terminated by ','
+collection items terminated by '$'
+map keys terminated by '#';
+
+load data local inpath '/home/hduser/mapfile' overwrite into table tab10;
+
+hive>select * from tab10;
+
+hive>select dud["bonus"] from tab10; 
+
+hive>select dud["bonus"],dud["insurance"] from tab10; 
+//LAB End

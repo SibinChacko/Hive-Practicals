@@ -1,0 +1,19 @@
+(III) We are creating a partition table on 'month' from column 'txndate' of txns1 dataset in 'txnrecords table' by using substring method.
+------------------------------------------------------------------------------------------------------------------------------------------>
+create table txnrecsByCat3(txnno INT, txndate STRING, custno INT, amount DOUBLE, category String, product STRING, city STRING, state STRING, spendby STRING)
+partitioned by (month STRING)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+b)Set properties
+---------------------
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.exec.dynamic.partition=true;
+
+
+c)Load the data
+----------------------
+
+from txnrecords txn INSERT OVERWRITE TABLE txnrecsByCat3 PARTITION(month) select txn.txnno, txn.txndate, txn.custno, txn.amount, txn.category,
+txn.product, txn.city, txn.state, txn.spendby, substring(txn.txndate,1,2) as month DISTRIBUTE By substring(txndate,1,2);

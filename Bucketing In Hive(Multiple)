@@ -1,0 +1,19 @@
+(II) We are creating a partition table on column 'category' of txns1 dataset and each category partioned on basis of column 'states' into desired no. of buckets(multiple buckets)
+
+a) We create a table
+----------------------------
+create table txnrecsByCat2(txnno INT, txndate STRING, custno INT, amount DOUBLE,product String,city String,state String,spendby String)
+partitioned by (category String)
+clustered by (state) into 10 buckets
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+b)Set properties
+---------------------
+set hive.exec.enforce.bucketing=true;
+
+c) Now we will load the data 
+------------------------------------------ 
+from txnrecords txn INSERT OVERWRITE TABLE txnrecsByCat2 PARTITION(category) select txn.txnno, txn.txndate, txn.custno, txn.amount,
+txn.product, txn.city, txn.state, txn.spendby, txn.category DISTRIBUTE By category;

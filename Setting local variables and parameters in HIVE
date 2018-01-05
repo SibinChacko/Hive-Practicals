@@ -1,0 +1,13 @@
+Setting up local variables and parameters in hive
+-----------------------------------------------------
+hive> set myage=25;
+hive> select * from customer where age >= ${hiveconf:myage};
+
+similarly, you could pass on command line:
+
+$ hive -hiveconf myage=25 -f professioncount.sql
+
+nano professioncount.sql
+
+select profession, count(profession) from retail.customer where age >= ${hiveconf:myage} group by profession order by profession;
+

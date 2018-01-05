@@ -1,0 +1,30 @@
+--> User Define Functions
+-------------------------
+create table testing(id string,unixtime string)
+row format delimited
+fields terminated by ',';
+
+load data local inpath '/home/hduser/counter.txt' into table testing;
+
+hive> select * from testing;
+
+****OK
+****one		1386023259550
+****two		1389523259550
+****three	1389523259550
+****four	1389523259550
+
+******* adding the jar in the hive script *********
+add jar /home/hduser/udfhive.jar;
+
+****** to display the jar files in hive *********
+list jars;
+
+******define user function ************
+create temporary function userdate as 'udfhive.UnixtimeToDate';
+
+
+****Then use function 'userdate' in sql command
+
+select id, userdate(unixtime) from testing;
+

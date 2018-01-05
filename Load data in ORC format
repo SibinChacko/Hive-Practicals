@@ -1,0 +1,9 @@
+--> Create and Load data in ORC format
+
+CREATE TABLE orc_table (
+student_name string,
+subject string,
+marks INT)
+STORED AS ORC;
+
+INSERT OVERWRITE TABLE orc_table SELECT student_name, subject, marks FROM csv_table;

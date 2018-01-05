@@ -1,0 +1,11 @@
+--> Create a sequence File format and load data from another table
+------------------------------------------------------------------
+CREATE TABLE seq_table (
+student_name string,
+subject string,
+marks INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+STORED AS SEQUENCEFILE;
+
+INSERT OVERWRITE TABLE seq_table SELECT student_name, subject, marks FROM csv_table;
+

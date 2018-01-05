@@ -1,0 +1,11 @@
+--> find sales done in each payment mode and their percentage
+--------------------------------------------------------------
+create table totalsales (total bigint)
+row format delimited                                                                                  
+fields terminated by ',';   
+
+insert overwrite table totalsales                                                                           
+select sum(amount) from txnrecords;
+
+select a.spendby, round(sum(a.amount),2) as typesales, round((sum(a.amount)/total*100),2) as salespercent from txnrecords a, totalsales b group by a.spendby, b.total ;
+

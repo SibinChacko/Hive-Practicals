@@ -1,0 +1,38 @@
+--> find sales based on age group with the % on totalsales
+---------------------------------------------------------
+
+create table out1 (custno int,firstname string,age int,profession string,amount double,product string)
+row format delimited                                                                                  
+fields terminated by ',';   
+
+
+insert overwrite table out1                                                                           
+select a.custno,a.firstname,a.age,a.profession,b.amount,b.product                                     
+from customer a JOIN txnrecords b ON a.custno = b.custno;     
+
+select * from out1 limit 100;
+
+create table out2 (custno int,firstname string,age int,profession string,amount double,product string, level string)
+row format delimited                                                                                  
+fields terminated by ',';   
+
+insert overwrite table out2
+select * , case when age<30 then 'low' when age>=30 and age < 50 then 'middle' when age>=50 then 'old' 
+else 'others' end
+from out1;
+
+
+select * from out2 limit 100; 
+
+describe out2;  
+
+create table out3 (level string, amount double, salespercent double)                      
+row format delimited
+fields terminated by ',';
+
+insert overwrite table out3  
+select a.level, round(sum(a.amount),2) as totalspent, round((sum(a.amount)/total*100),2) as salespercent  from out2 a, totalsales b group by a.level, b.total;
+
+
+select * from out3;
+

@@ -1,0 +1,22 @@
+Complex Datatypes in Hive : STRUCT
+----------------------------------
+
+LAB Start
+---------
+cat >structfile
+1,abc,40000,a$b$c,bonus#500$insurance#200,city1$state1$111
+2,def,3000,d$f,bonus#500,city2$state2$222
+
+hive>
+create table tab11(id int,name string,sal bigint,sub array<string>,dud map<string,int>,addr struct<city:string,state:string,pin:bigint>)
+row format delimited 
+fields terminated by ','
+collection items terminated by '$'
+map keys terminated by '#';
+
+load data local inpath '/home/hduser/structfile' into table tab11;
+
+hive>select addr.city from tab11;
+
+LAB End
+-------

@@ -1,0 +1,38 @@
+--> Loading Avro type-data (flume) in Hive table
+--------------------------------------------
+CREATE TABLE tweets
+  ROW FORMAT SERDE
+     'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+  STORED AS INPUTFORMAT
+     'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+  OUTPUTFORMAT
+     'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+  TBLPROPERTIES ('avro.schema.url'='file:/home/hduser/intel.avsc') ;
+
+LOAD DATA Local INPATH '/home/hduser/FlumeData.1504749217753' OVERWRITE INTO TABLE tweets;
+
+
+
+CREATE TABLE tweets2 (
+id string, 
+user_friends_count int, 
+user_location string,
+user_description string,
+user_statuses_count int,
+user_followers_count int,
+user_name string,
+user_screen_name string,
+created_at string,
+text string,
+retweet_count bigint,
+retweeted boolean,
+in_reply_to_user_id bigint,
+source string,
+in_reply_to_status_id bigint,
+media_url_https string,
+expanded_url string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '/t' 
+STORED AS TEXTFILE;
+
+INSERT OVERWRITE TABLE tweets2 SELECT * FROM tweets;
+
